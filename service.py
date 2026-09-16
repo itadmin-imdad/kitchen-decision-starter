@@ -20,7 +20,7 @@ app = Flask(__name__)
 GROQ_API_KEY = os.environ.get(
     "GROQ_API_KEY", "gsk_REPLACE-ME-WITH-YOUR-OWN-KEY-000000000000")
 MODEL_URL = "https://api.groq.com/openai/v1/chat/completions"
-MODEL_NAME = "llama-3.1-8b-instant"
+MODEL_NAME = "openai/gpt-oss-20b"
 
 # kitchen data - copied from world.json so we don't have to ship the file
 PRICES = {"classic_burger": 32.0, "cheesy_fries": 18.0, "chicken_wrap": 28.0,
