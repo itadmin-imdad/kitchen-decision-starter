@@ -17,10 +17,10 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-GEMINI_API_KEY = os.environ.get(
-    "GEMINI_API_KEY", "AIzaSyD-REPLACE-ME-WITH-YOUR-OWN-KEY-000000")
-MODEL_URL = ("https://generativelanguage.googleapis.com/v1beta/models/"
-             "gemini-3.6-flash:generateContent")
+GROQ_API_KEY = os.environ.get(
+    "GROQ_API_KEY", "gsk_REPLACE-ME-WITH-YOUR-OWN-KEY-000000000000")
+MODEL_URL = "https://api.groq.com/openai/v1/chat/completions"
+MODEL_NAME = "llama-3.1-8b-instant"
 
 # kitchen data - copied from world.json so we don't have to ship the file
 PRICES = {"classic_burger": 32.0, "cheesy_fries": 18.0, "chicken_wrap": 28.0,
@@ -63,10 +63,12 @@ def ask_model(order):
         "Orders currently cooking: " + str(len(open_orders)) + "\n"
     )
     r = requests.post(
-        MODEL_URL + "?key=" + GEMINI_API_KEY,
-        json={"contents": [{"parts": [{"text": prompt}]}]},
+        MODEL_URL,
+        headers={"Authorization": "Bearer " + GROQ_API_KEY},
+        json={"model": MODEL_NAME,
+              "messages": [{"role": "user", "content": prompt}]},
     )
-    text = r.json()["candidates"][0]["content"]["parts"][0]["text"]
+    text = r.json()["choices"][0]["message"]["content"]
     text = text.replace("```json", "").replace("```", "")
     return json.loads(text)
 
